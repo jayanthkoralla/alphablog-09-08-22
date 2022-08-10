@@ -17,14 +17,15 @@ class ArticlesController < ApplicationController
     end
 
     def create
-        @article = Article.new(article_params)
+        @article = Article.new(params.require(:article).permit(:title,:description))
+        @article.user = User.first
         # render plain: @article.inspect
         if @article.save
             flash[:notice] = "Article was created succesfully" 
             # redirect_to article_path(@article) or
             redirect_to @article
         else
-            render 'new'
+            render :new, status: :unprocessable_entity
         end
     end
 
